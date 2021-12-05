@@ -33,7 +33,7 @@ const Home: NextPage = () => {
 
   if (vehiclesError || zonesError) return <div>failed to load</div>;
 
-  if (!vehicles && !zones?.zones) return <div>loading...</div>;
+  if (!vehicles || !zones?.zones) return <div>loading...</div>;
 
   if (!isBrowser && window) {
     return null;
@@ -49,12 +49,6 @@ const Home: NextPage = () => {
       <main>
         <h1>Poppy vehicles</h1>
         <Map vehicles={vehicles} zones={zones?.zones} />
-        <div>
-          {/* <pre style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-            {JSON.stringify(vehicles)}
-            {JSON.stringify(zones)}
-          </pre> */}
-        </div>
       </main>
 
       <footer>&copy; Poppy {new Date().getFullYear()}</footer>
