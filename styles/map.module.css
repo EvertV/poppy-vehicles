@@ -1,11 +1,13 @@
 .marker-cluster-custom {
   background-color: white;
   border: 3px black solid;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   display: flex;
-  text-align: center;
+  align-items: center;
   justify-content: center;
 }
 .marker-cluster-custom span {
-  font-size: 12pt;
+  font-size: 9pt;
 }

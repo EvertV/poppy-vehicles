@@ -56,11 +56,11 @@ const SCOOTER_COLORS = [
   "deepskyblue",
 ];
 
-const createClusterCustomIcon = function (cluster) {
+const createClusterCustomIcon = (cluster) => {
   return L.divIcon({
     html: `<span>${cluster.getChildCount()}</span>`,
     className: `${styles['marker-cluster-custom']}`,
-    iconSize: L.point(40, 40, true),
+    iconSize: L.point(25, 25, true),
   });
 }
 
