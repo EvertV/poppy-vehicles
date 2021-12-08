@@ -4,26 +4,12 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css"; // Re-uses images from ~leaflet package
 import "leaflet-defaulticon-compatibility";
 import { useEffect, useState } from "react";
+import styles from "../styles/map.module.css"
+
 interface Props {
   vehicles: any[];
   zones: any[];
 }
-
-const carIcon = new L.Icon({
-  iconUrl: "/car.svg",
-  iconRetinaUrl: "/car.svg",
-  iconSize: new L.Point(60, 30),
-});
-const scooterIcon = new L.Icon({
-  iconUrl: "/scooter.svg",
-  iconRetinaUrl: "/scooter.svg",
-  iconSize: new L.Point(60, 30),
-});
-const stepIcon = new L.Icon({
-  iconUrl: "/step.svg",
-  iconRetinaUrl: "/step.svg",
-  iconSize: new L.Point(60, 30),
-});
 const normaliseArrays = (arrays: any[]) => {
   const reversedValues = arrays.map((longlat: any[]) => {
     const revesedLongLat = [...longlat];
@@ -31,6 +17,21 @@ const normaliseArrays = (arrays: any[]) => {
   });
   return reversedValues;
 };
+
+const CustomIcon = L.Icon.extend({
+  options: {
+    iconSize: new L.Point(30, 30),
+  }
+});
+const carIcon = new CustomIcon({
+  iconUrl: "/car-pin.png"
+});
+const scooterIcon = new CustomIcon({
+  iconUrl: "/scooter-pin.png"
+});
+const stepIcon = new CustomIcon({
+  iconUrl: "/step-pin.png"
+});
 
 const getIcon = (model: "scooter" | "car" | "step") => {
   switch (model) {
@@ -46,21 +47,12 @@ const getIcon = (model: "scooter" | "car" | "step") => {
 };
 const CAR_COLORS = [
   "red",
-  "darkorange",
-  "coral",
-  "orange",
-  "yellow",
-  "greenyellow",
 ];
 const SCOOTER_COLORS = [
-  "blue",
   "deepskyblue",
-  "teal",
-  "cyan",
-  "blueviolet",
-  "purple",
 ];
 const Map = ({ vehicles, zones }: Props): JSX.Element => {
+
   const [stack, setStack] = useState([]);
   useEffect(() => {
     const getPolygons = () => {
@@ -70,21 +62,15 @@ const Map = ({ vehicles, zones }: Props): JSX.Element => {
         const type = zoneContainer.geom.geometry.type;
 
         if (coordinates && type === "MultiPolygon") {
-          coordinates?.forEach((zones: any) => {
-            zones.forEach((zone: any, key: number) => {
-              console.log(
-                "zone",
-                key,
-                zoneContainer.name,
-                normaliseArrays(zone)
-              );
+          coordinates?.forEach((zones: any, coorKey: number) => {
+            zones.forEach((zone: any, zonesKey: number) => {
               zonesArray.push(
                 <Polygon
-                  key={`${zoneContainer.name}-${key}`}
+                  key={`${zoneContainer.name}-${coorKey}-${zonesKey}`}
                   pathOptions={{
                     color: zoneContainer.name.includes("car")
-                      ? CAR_COLORS[key] || "black"
-                      : SCOOTER_COLORS[key] || "black",
+                      ? CAR_COLORS[zonesKey] || "hotpink"
+                      : SCOOTER_COLORS[zonesKey] || "skyblue",
                   }}
                   positions={normaliseArrays(zone)}
                 />
