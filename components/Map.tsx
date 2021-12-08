@@ -4,6 +4,10 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css"; // Re-uses images from ~leaflet package
 import "leaflet-defaulticon-compatibility";
 import { useEffect, useState } from "react";
+// @ts-ignore
+import MarkerClusterGroup from 'react-leaflet-markercluster';
+import "react-leaflet-markercluster/dist/styles.min.css";
+
 import styles from "../styles/map.module.css"
 
 interface Props {
@@ -51,6 +55,15 @@ const CAR_COLORS = [
 const SCOOTER_COLORS = [
   "deepskyblue",
 ];
+
+const createClusterCustomIcon = function (cluster) {
+  return L.divIcon({
+    html: `<span>${cluster.getChildCount()}</span>`,
+    className: `${styles['marker-cluster-custom']}`,
+    iconSize: L.point(40, 40, true),
+  });
+}
+
 const Map = ({ vehicles, zones }: Props): JSX.Element => {
 
   const [stack, setStack] = useState([]);
@@ -83,6 +96,7 @@ const Map = ({ vehicles, zones }: Props): JSX.Element => {
     };
     getPolygons();
   }, [zones]);
+
   return (
     <MapContainer
       center={[51.260197, 4.402771]} // Antwerp
@@ -93,17 +107,19 @@ const Map = ({ vehicles, zones }: Props): JSX.Element => {
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {vehicles.map((v) => (
-        <Marker
-          position={[v.locationLatitude, v.locationLongitude]}
-          key={v.uuid}
-          icon={getIcon(v.model.type)}
-        >
-          <Popup>
-            {v.model.type} {v.model.name}
-          </Popup>
-        </Marker>
-      ))}
+      <MarkerClusterGroup spiderfyOnMaxZoom={false} showCoverageOnHover={false} maxClusterRadius={40} iconCreateFunction={createClusterCustomIcon}>
+        {vehicles.map((v) => (
+          <Marker
+            position={[v.locationLatitude, v.locationLongitude]}
+            key={v.uuid}
+            icon={getIcon(v.model.type)}
+          >
+            <Popup>
+              {v.model.type} {v.model.name}
+            </Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
       {stack}
     </MapContainer>
   );
