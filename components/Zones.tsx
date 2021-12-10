@@ -4,7 +4,6 @@ import { Polygon } from "react-leaflet";
 
 import { LatLngExpression } from "leaflet";
 
-
 interface Props {
   zones?: ServerZone[];
   modelFilter: string[]
