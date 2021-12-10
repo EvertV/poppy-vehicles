@@ -23,7 +23,7 @@ interface ServerVehicle {
   moveUnitPrice: number;
   moveUnitPriceNet: number;
   name: string;
-  onboardingUrl: string | undefined;
+  onboardingUrl?: string;
   overKilometerPrice: number;
   overKilometerPriceNet: number;
   pauseUnitPrice: number;
