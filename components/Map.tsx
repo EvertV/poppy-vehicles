@@ -12,6 +12,7 @@ import { LatLngBounds } from "leaflet"
 import Zones from '@/components/Zones';
 import Markers from '@/components/Markers';
 import EditMap from '@/components/EditMap';
+import DisplayVehicles from '@/components/DisplayVehicles';
 
 interface Props {
   vehicles: ServerVehicle[];
@@ -34,27 +35,38 @@ const Map = ({ vehicles, zones, setVehicleUUID, modelFilter }: Props): JSX.Eleme
   const [filteredVehicles, setFilteredVehicles] = useState<ServerVehicle[]>(vehicles)
 
   useEffect(() => {
+    const newVehicles = vehicles.filter((v: ServerVehicle) => modelFilter.includes(v.model.type))
     if (bounds && bounds.isValid()) {
-      setFilteredVehicles(vehicles.filter((v: ServerVehicle) => bounds.contains({ lat: v.locationLatitude, lng: v.locationLongitude })))
+      setFilteredVehicles(newVehicles.filter((v: ServerVehicle) => bounds.contains({ lat: v.locationLatitude, lng: v.locationLongitude })))
     } else {
-      setFilteredVehicles(vehicles)
+      setFilteredVehicles(newVehicles)
     }
-  }, [bounds, vehicles])
+  }, [bounds, modelFilter, vehicles])
+
+
+
   return (
-    <MapContainer
-      center={[51.220290, 4.399433]} // Antwerp
-      zoom={14}
-      placeholder={<MapPlaceholder />}
-      style={{ height: "100vh" }}
-    >
-      <TileLayer
-        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Markers vehicles={filteredVehicles} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} />
-      <Zones zones={zones} modelFilter={modelFilter} />
-      <EditMap setBounds={setBounds} />
-    </MapContainer>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div style={{ flexBasis: '75%' }}>
+        <MapContainer
+          center={[51.220290, 4.399433]} // Antwerp
+          zoom={14}
+          placeholder={<MapPlaceholder />}
+          style={{ height: "100vh", width: 'auto' }}
+        >
+          <TileLayer
+            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <Markers vehicles={filteredVehicles} setVehicleUUID={setVehicleUUID} />
+          <Zones zones={zones} modelFilter={modelFilter} />
+          <EditMap setBounds={setBounds} />
+        </MapContainer>
+      </div>
+      <div style={{ flexBasis: '25%' }}>
+        <DisplayVehicles filteredVehicles={filteredVehicles} />
+      </div>
+    </div>
   );
 };
 
