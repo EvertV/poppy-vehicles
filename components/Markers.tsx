@@ -10,6 +10,7 @@ import styles from "../styles/map.module.css"
 interface Props {
   vehicles: ServerVehicle[];
   setVehicleUUID: (uuid: string) => void
+  modelFilter: string[]
 }
 const carIcon = new L.Icon({
   iconSize: new L.Point(30, 30),
@@ -44,11 +45,10 @@ const createClusterCustomIcon = (cluster: any) => {
   });
 }
 
-const Markers = ({ vehicles, setVehicleUUID }: Props): JSX.Element => {
-
+const Markers = ({ vehicles, setVehicleUUID, modelFilter }: Props): JSX.Element => {
   return (
     <MarkerClusterGroup spiderfyOnMaxZoom={false} showCoverageOnHover={false} maxClusterRadius={40} iconCreateFunction={createClusterCustomIcon}>
-      {vehicles.map((v: ServerVehicle) => (
+      {vehicles.filter((v: ServerVehicle) => modelFilter.includes(v.model.type)).map((v: ServerVehicle) => (
         <Marker
           position={[v.locationLatitude, v.locationLongitude]}
           key={v.uuid}

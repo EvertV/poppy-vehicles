@@ -13,22 +13,23 @@ interface Props {
   vehicles: ServerVehicle[];
   zones?: ServerZone[];
   setVehicleUUID: (uuid: string) => void
+  modelFilter: string[]
 }
 
-const Map = ({ vehicles, zones, setVehicleUUID }: Props): JSX.Element => {
+const Map = ({ vehicles, zones, setVehicleUUID, modelFilter }: Props): JSX.Element => {
 
   return (
     <MapContainer
-      center={[51.260197, 4.402771]} // Antwerp
-      zoom={13}
+      center={[51.220290, 4.399433]} // Antwerp
+      zoom={14}
       style={{ height: "100vh" }}
     >
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Markers vehicles={vehicles} setVehicleUUID={setVehicleUUID} />
-      <Zones zones={zones} />
+      <Markers vehicles={vehicles} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} />
+      <Zones zones={zones} modelFilter={modelFilter} />
     </MapContainer>
   );
 };

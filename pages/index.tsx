@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Head from "next/head";
 import useSWR from "swr";
 import type { NextPage } from "next";
@@ -10,6 +10,7 @@ const fetcher = (...args: any) => fetch(...args).then((res) => res.json());
 const Home: NextPage = () => {
   const [isBrowser, setIsBrowser] = useState(false);
   const [vehicleUUID, setVehicleUUID] = useState<string>();
+  const [modelFilter, setModelFilter] = useState<string[]>(["car", "step", "scooter"]);
   useEffect(() => {
     setIsBrowser(true);
   }, []);
@@ -49,10 +50,20 @@ const Home: NextPage = () => {
 
       <main>
         <h1>Poppy vehicles</h1>
-        {vehicleUUID && <>Vehicle selected: {vehicleUUID}
+        {vehicleUUID && (<>
+          Vehicle selected: {vehicleUUID}
           <button onClick={() => setVehicleUUID('')}>Reset vehicle</button>
-        </>}
-        <Map vehicles={vehicles} zones={zones?.zones} setVehicleUUID={setVehicleUUID} />
+        </>)}
+        Vehicle filter:
+        {['car', 'step', 'scooter'].map((v: string) => (
+          <div key={v} >
+            <input type="checkbox" id={v} name={v} value={v} checked={modelFilter.includes(v)}
+              onChange={(e) => !e.target.checked ? setModelFilter(modelFilter.filter(item => item !== v)) : setModelFilter([...modelFilter, v])} />
+            <label htmlFor={v}>{v}</label>
+          </div>
+        ))}
+
+        <Map vehicles={vehicles} zones={zones?.zones} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} />
       </main>
 
       <footer>&copy; Poppy {new Date().getFullYear()}</footer>
