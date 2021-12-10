@@ -9,22 +9,23 @@ const fetcher = (...args: any) => fetch(...args).then((res) => res.json());
 
 const Home: NextPage = () => {
   const [isBrowser, setIsBrowser] = useState(false);
+  const [vehicleUUID, setVehicleUUID] = useState<string>();
   useEffect(() => {
     setIsBrowser(true);
   }, []);
 
-  const { data: vehicles, error: vehiclesError } = useSWR(
+  const { data: vehicles, error: vehiclesError } = useSWR<ServerVehicle[], string>(
     `https://poppy.red/api/v2/vehicles`,
     fetcher
   );
-  const { data: zones, error: zonesError } = useSWR(
-    `https://poppy.red/api/v2/zones`,
+  const { data: zones, error: zonesError } = useSWR<{ zones: ServerZone[] }, string>(
+    `https://poppy.red/api/v2/zones${vehicleUUID ? `?vehicleUUID=${vehicleUUID}` : ``}`,
     fetcher
-  ); // https://poppy.red/api/v2/zones?vehicleUUID=888f5d36-aa23-11ea-bd38-024d0cba6da4
+  );
 
   const Map = useMemo(
     () =>
-      dynamic(() => import("../components/Map"), {
+      dynamic(() => import("@/components/Map"), {
         loading: () => <p>A map is loading</p>,
         ssr: false,
       }),
@@ -33,7 +34,7 @@ const Home: NextPage = () => {
 
   if (vehiclesError || zonesError) return <div>failed to load</div>;
 
-  if (!vehicles || !zones?.zones) return <div>loading...</div>;
+  if (!vehicles) return <div>loading...</div>;
 
   if (!isBrowser && window) {
     return null;
@@ -48,7 +49,10 @@ const Home: NextPage = () => {
 
       <main>
         <h1>Poppy vehicles</h1>
-        <Map vehicles={vehicles} zones={zones?.zones} />
+        {vehicleUUID && <>Vehicle selected: {vehicleUUID}
+          <button onClick={() => setVehicleUUID('')}>Reset vehicle</button>
+        </>}
+        <Map vehicles={vehicles} zones={zones?.zones} setVehicleUUID={setVehicleUUID} />
       </main>
 
       <footer>&copy; Poppy {new Date().getFullYear()}</footer>

@@ -1,39 +1,42 @@
-import { MapContainer, TileLayer, Marker, Popup, Polygon } from "react-leaflet";
+import { useEffect, useState } from "react";
 import L from "leaflet";
+
+import { MapContainer, TileLayer, Marker, Popup, Polygon } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css"; // Re-uses images from ~leaflet package
 import "leaflet-defaulticon-compatibility";
-import { useEffect, useState } from "react";
-// @ts-ignore
+
+import 'leaflet.markercluster';
+//@ts-ignore
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import "react-leaflet-markercluster/dist/styles.min.css";
+
+import { LatLngExpression } from "leaflet";
 
 import styles from "../styles/map.module.css"
 
 interface Props {
-  vehicles: any[];
-  zones: any[];
+  vehicles: ServerVehicle[];
+  zones: ServerZone[] | undefined;
+  setVehicleUUID: (uuid: string) => void
 }
-const normaliseArrays = (arrays: any[]) => {
-  const reversedValues = arrays.map((longlat: any[]) => {
-    const revesedLongLat = [...longlat];
-    return revesedLongLat.reverse();
+const normaliseArrays = (arrays: LatLngExpression[][]): LatLngExpression[][] => {
+  const reversedValues = arrays.map((longlat: LatLngExpression[]) => {
+    return [...longlat].reverse();
   });
   return reversedValues;
 };
 
-const CustomIcon = L.Icon.extend({
-  options: {
-    iconSize: new L.Point(30, 30),
-  }
-});
-const carIcon = new CustomIcon({
+const carIcon = new L.Icon({
+  iconSize: new L.Point(30, 30),
   iconUrl: "/car-pin.png"
 });
-const scooterIcon = new CustomIcon({
+const scooterIcon = new L.Icon({
+  iconSize: new L.Point(30, 30),
   iconUrl: "/scooter-pin.png"
 });
-const stepIcon = new CustomIcon({
+const stepIcon = new L.Icon({
+  iconSize: new L.Point(30, 30),
   iconUrl: "/step-pin.png"
 });
 
@@ -49,14 +52,7 @@ const getIcon = (model: "scooter" | "car" | "step") => {
       return carIcon;
   }
 };
-const CAR_COLORS = [
-  "red",
-];
-const SCOOTER_COLORS = [
-  "deepskyblue",
-];
-
-const createClusterCustomIcon = (cluster) => {
+const createClusterCustomIcon = (cluster: any) => {
   return L.divIcon({
     html: `<span>${cluster.getChildCount()}</span>`,
     className: `${styles['marker-cluster-custom']}`,
@@ -64,13 +60,13 @@ const createClusterCustomIcon = (cluster) => {
   });
 }
 
-const Map = ({ vehicles, zones }: Props): JSX.Element => {
+const Map = ({ vehicles, zones, setVehicleUUID }: Props): JSX.Element => {
 
-  const [stack, setStack] = useState([]);
+  const [stack, setStack] = useState<JSX.Element[]>([]);
   useEffect(() => {
     const getPolygons = () => {
       const zonesArray: JSX.Element[] = [];
-      zones.forEach((zoneContainer: any): JSX.Element | void => {
+      zones?.forEach((zoneContainer: ServerZone): JSX.Element | void => {
         const coordinates = zoneContainer.geom.geometry.coordinates;
         const type = zoneContainer.geom.geometry.type;
 
@@ -82,8 +78,14 @@ const Map = ({ vehicles, zones }: Props): JSX.Element => {
                   key={`${zoneContainer.name}-${coorKey}-${zonesKey}`}
                   pathOptions={{
                     color: zoneContainer.name.includes("car")
-                      ? CAR_COLORS[zonesKey] || "hotpink"
-                      : SCOOTER_COLORS[zonesKey] || "skyblue",
+                      ? 'red'
+                      : 'deepskyblue',
+                    fillOpacity: zonesKey === 0 ? 0.2 : 0.5,
+                    stroke: true,
+                    lineJoin: 'round',
+                    fillRule: 'nonzero',
+                    dashArray: zonesKey !== 0 ? '5,5' : undefined,
+                    dashOffset: zonesKey !== 0 ? '5' : undefined
                   }}
                   positions={normaliseArrays(zone)}
                 />
@@ -94,7 +96,9 @@ const Map = ({ vehicles, zones }: Props): JSX.Element => {
       });
       setStack(zonesArray);
     };
-    getPolygons();
+    if (zones) {
+      getPolygons();
+    }
   }, [zones]);
 
   return (
@@ -108,11 +112,16 @@ const Map = ({ vehicles, zones }: Props): JSX.Element => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MarkerClusterGroup spiderfyOnMaxZoom={false} showCoverageOnHover={false} maxClusterRadius={40} iconCreateFunction={createClusterCustomIcon}>
-        {vehicles.map((v) => (
+        {vehicles.map((v: ServerVehicle) => (
           <Marker
             position={[v.locationLatitude, v.locationLongitude]}
             key={v.uuid}
             icon={getIcon(v.model.type)}
+            eventHandlers={{
+              click: () => {
+                setVehicleUUID(v.uuid)
+              },
+            }}
           >
             <Popup>
               {v.model.type} {v.model.name}
