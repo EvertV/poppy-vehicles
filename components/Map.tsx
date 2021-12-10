@@ -36,6 +36,8 @@ const Map = ({ vehicles, zones, setVehicleUUID, modelFilter }: Props): JSX.Eleme
   useEffect(() => {
     if (bounds && bounds.isValid()) {
       setFilteredVehicles(vehicles.filter((v: ServerVehicle) => bounds.contains({ lat: v.locationLatitude, lng: v.locationLongitude })))
+    } else {
+      setFilteredVehicles(vehicles)
     }
   }, [bounds, vehicles])
   return (

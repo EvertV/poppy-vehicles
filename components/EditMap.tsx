@@ -3,7 +3,7 @@ import { EditControl } from "react-leaflet-draw"
 import { LatLngBounds, latLngBounds } from "leaflet"
 
 interface Props {
-  setBounds: (bounds: LatLngBounds) => void
+  setBounds: (bounds: LatLngBounds | undefined) => void
 }
 
 const EditMap = ({ setBounds }: Props) => (
@@ -12,12 +12,17 @@ const EditMap = ({ setBounds }: Props) => (
       position='topright'
       onCreated={(e: any) => {
         console.log('create', e);
-        console.log('longlat', e.layer._bounds._northEast);
-        setBounds(latLngBounds(e.layer._bounds));
+        console.log('longlat', e.layer._latlngs);
+        setBounds(latLngBounds(e.layer._latlngs));
       }}
-      onDeleted={(e: any) => console.log('delete', e)}
+      onDeleted={() => setBounds(undefined)}
       draw={{
-        rectangle: false
+        rectangle: true,
+        polyline: false,
+        circle: false,
+        marker: false,
+        circlemarker: false,
+        polygon: false
       }}
     />
   </FeatureGroup>
