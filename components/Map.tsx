@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css"; // Re-uses images from ~leaflet package
@@ -7,7 +7,7 @@ import "leaflet-defaulticon-compatibility";
 import 'leaflet.markercluster';
 import "react-leaflet-markercluster/dist/styles.min.css";
 import 'leaflet-draw/dist/leaflet.draw.css'
-import { LatLngBounds, latLngBounds } from "leaflet"
+import { LatLngBounds } from "leaflet"
 
 import Zones from '@/components/Zones';
 import Markers from '@/components/Markers';
@@ -30,21 +30,26 @@ const MapPlaceholder = () => {
 }
 
 const Map = ({ vehicles, zones, setVehicleUUID, modelFilter }: Props): JSX.Element => {
-  const [bounds, setBounds] = useState<LatLngBounds>(latLngBounds([]))
+  const [bounds, setBounds] = useState<LatLngBounds>()
+  const [filteredVehicles, setFilteredVehicles] = useState<ServerVehicle[]>(vehicles)
 
+  useEffect(() => {
+    if (bounds && bounds.isValid()) {
+      setFilteredVehicles(vehicles.filter((v: ServerVehicle) => bounds.contains({ lat: v.locationLatitude, lng: v.locationLongitude })))
+    }
+  }, [bounds, vehicles])
   return (
     <MapContainer
       center={[51.220290, 4.399433]} // Antwerp
       zoom={14}
       placeholder={<MapPlaceholder />}
       style={{ height: "100vh" }}
-      bounds={bounds}
     >
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Markers vehicles={vehicles} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} />
+      <Markers vehicles={filteredVehicles} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} />
       <Zones zones={zones} modelFilter={modelFilter} />
       <EditMap setBounds={setBounds} />
     </MapContainer>

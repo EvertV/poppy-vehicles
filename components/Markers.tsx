@@ -1,4 +1,3 @@
-import React, { useMemo } from "react";
 import L from "leaflet";
 
 import { Marker, Popup } from "react-leaflet";
@@ -47,8 +46,6 @@ const createClusterCustomIcon = (cluster: any) => {
 }
 
 const Markers = ({ vehicles, setVehicleUUID, modelFilter }: Props): JSX.Element => {
-
-
   return (
     <MarkerClusterGroup spiderfyOnMaxZoom={false} showCoverageOnHover={false} maxClusterRadius={40} iconCreateFunction={createClusterCustomIcon}>
       {vehicles.filter((v: ServerVehicle) => modelFilter.includes(v.model.type)).map((v: ServerVehicle) => (
