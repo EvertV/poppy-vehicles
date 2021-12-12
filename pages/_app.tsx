@@ -21,7 +21,7 @@ const GlobalStyles = css`
     color: #181818;
   }
   body {
-    /* overflow: hidden; */
+    height: 100vh;
   }
   .sr-only {
     display: none;

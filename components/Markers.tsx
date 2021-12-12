@@ -5,6 +5,7 @@ import styles from "../styles/map.module.css"
 import 'leaflet.markercluster';
 //@ts-ignore
 import MarkerClusterGroup from 'react-leaflet-markercluster';
+import Vehicle from '@/components/Vehicle';
 
 
 interface Props {
@@ -62,7 +63,7 @@ const Markers = ({ vehicles, setVehicleUUID }: Props): JSX.Element => {
           }}
         >
           <Popup>
-            {v.model.type} {v.model.name}
+            <Vehicle vehicle={v} noBorder />
           </Popup>
         </Marker>
       ))}

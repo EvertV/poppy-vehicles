@@ -8,6 +8,7 @@ import Header from '@/components/Header';
 import DisplayVehicles from '@/components/DisplayVehicles';
 import { css } from '@emotion/react'
 import { LatLngBounds } from "leaflet"
+import { Center, Spinner } from '@chakra-ui/react'
 
 //@ts-ignore
 const fetcher = (...args: any) => fetch(...args).then((res) => res.json());
@@ -46,7 +47,10 @@ const Home: NextPage = () => {
   const Map = useMemo(
     () =>
       dynamic(() => import("@/components/Map"), {
-        loading: () => <p>A map is loading</p>,
+        loading: () => (<Center css={css`
+        height: calc(100vh - 65px);`}>
+          <Spinner color='red.500' />
+        </Center>),
         ssr: false,
       }),
     []
@@ -63,27 +67,26 @@ const Home: NextPage = () => {
       {(showSplash || !filteredVehicles) && <SplashScreen />}
       {(filteredVehicles) &&
         <>
-          <main>
-            <Header />
-            <div css={css`
+          <Header />
+          <main css={css`
               display: flex;
               flex-direction: row;
-              height: 100vh;
+              height: calc(100vh - 65px);
             `}>
-              <div css={css`
+            <section css={css`
+                overflow: hidden;
                 flex-basis: 75%;
               `}>
-                <Map filteredVehicles={filteredVehicles} zones={zones?.zones} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} setBounds={setBounds} />
-              </div>
-              <div css={css`
+              <Map filteredVehicles={filteredVehicles} zones={zones?.zones} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} setBounds={setBounds} />
+            </section>
+            <aside css={css`
                 padding: 1rem;
                 flex-basis: 25%;
+                overflow: auto;
               `}>
-                <DisplayVehicles filteredVehicles={filteredVehicles} vehicleUUID={vehicleUUID} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} setModelFilter={setModelFilter} />
-              </div>
-            </div>
+              <DisplayVehicles filteredVehicles={filteredVehicles} vehicleUUID={vehicleUUID} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} setModelFilter={setModelFilter} hasSelection={!!bounds} />
+            </aside>
           </main>
-          <footer>&copy; Poppy {new Date().getFullYear()}</footer>
         </>
       }
 

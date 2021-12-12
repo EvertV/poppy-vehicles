@@ -4,12 +4,13 @@ const Header = () => (
   <h1 css={css`
     text-align: center;
     background-color: red;
-    padding: 1rem;
-    display: block;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   `}>
     <img src='/logo.svg' css={css`
       filter: brightness(0) invert(1);
-      margin:auto;
     `} alt="Poppy Logo" />
   </h1>
 );

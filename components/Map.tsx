@@ -25,22 +25,12 @@ interface Props {
   modelFilter: string[]
 }
 
-const MapPlaceholder = () => {
-  return (
-    <p>
-      Poppy map with vehicles and start/stop zones.{' '}
-      <noscript>You need to enable JavaScript to see this map.</noscript>
-    </p>
-  )
-}
-
 const Map = ({ filteredVehicles, zones, setVehicleUUID, modelFilter, setBounds }: Props): JSX.Element => {
 
   return (
     <MapContainer
       center={[51.220290, 4.399433]} // Antwerp
       zoom={14}
-      placeholder={<MapPlaceholder />}
       css={css`
         height: 100%;
       `}
