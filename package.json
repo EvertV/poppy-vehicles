@@ -8,10 +8,13 @@
     "build": "next build && next export"
   },
   "dependencies": {
+    "@chakra-ui/react": "^1.7.3",
     "@emotion/babel-preset-css-prop": "^11.2.0",
     "@emotion/react": "^11.7.0",
+    "@emotion/styled": "^11.6.0",
     "@turf/buffer": "^6.5.0",
     "@turf/collect": "^6.5.0",
+    "framer-motion": "^5.4.5",
     "leaflet": "^1.7.1",
     "leaflet-defaulticon-compatibility": "^0.1.1",
     "leaflet-draw": "^1.0.4",
@@ -21,8 +24,7 @@
     "react-leaflet": "^3.2.2",
     "react-leaflet-draw": "^0.19.8",
     "react-leaflet-markercluster": "^3.0.0-rc1",
-    "swr": "^1.1.0",
-    "the-new-css-reset": "^1.4.2"
+    "swr": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

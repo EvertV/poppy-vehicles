@@ -1,11 +1,11 @@
 import L from "leaflet";
 
 import { Marker, Popup } from "react-leaflet";
+import styles from "../styles/map.module.css"
 import 'leaflet.markercluster';
 //@ts-ignore
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 
-import styles from "../styles/map.module.css"
 
 interface Props {
   vehicles: ServerVehicle[]

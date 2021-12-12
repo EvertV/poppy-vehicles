@@ -1,41 +1,36 @@
 import Head from "next/head";
 import type { AppProps } from "next/app";
 
-import '../styles/global.css'
+import { ChakraProvider } from '@chakra-ui/react'
 
-import "the-new-css-reset/css/reset.css"
 import { Global, css } from '@emotion/react'
+import { extendTheme } from '@chakra-ui/react'
+
+const colors = {
+  brand: {
+    900: '#1a365d',
+    800: '#153e75',
+    700: '#2a69ac',
+  },
+}
+const theme = extendTheme({ colors })
 
 const GlobalStyles = css`
   html {
     font-family: "Quiet Sans Regular", sans-serif;
+    color: #181818;
   }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: "Quiet Sans Regular", sans-serif;
-    font-weight: 600;
+  body {
+    /* overflow: hidden; */
   }
-
-  h1 {
-    font-size: 24pt;
-  }
-
-  h2 {
-    font-size: 20pt;
-  }
-
-  h3 {
-    font-size: 18pt;
-  }
-  
-  h4, h5, h6 {
-    font-size: 16pt;
+  .sr-only {
+    display: none;
   }
 `;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <ChakraProvider theme={theme}>
       <Head>
         <meta
           name="viewport"
@@ -45,7 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <Global styles={GlobalStyles} />
       <Component {...pageProps} />
-    </>
+    </ChakraProvider>
   );
 }
 

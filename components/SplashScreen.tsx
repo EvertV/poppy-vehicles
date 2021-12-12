@@ -11,7 +11,6 @@ const SplashScreen = () => (
     z-index: 10000;
     display: flex;
     justify-content: center;
-    overflow: hidden;
     margin: 0;
   `}>
     <img src='/logo.svg' alt="Poppy Logo"
