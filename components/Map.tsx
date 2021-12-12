@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
 
-import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, useMapEvents, Circle, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css"; // Re-uses images from ~leaflet package
 import "leaflet-defaulticon-compatibility";
@@ -19,8 +19,9 @@ import { LatLngBounds } from "leaflet"
 
 interface Props {
   filteredVehicles: ServerVehicle[];
+  selectedVehicle?: ServerVehicle;
   zones?: ServerZone[];
-  setVehicleUUID: (uuid: string) => void
+  setSelectedVehicle: (v?: ServerVehicle) => void
   setBounds: (bounds: LatLngBounds | undefined) => void
   modelFilter: string[]
 }
@@ -38,8 +39,19 @@ const MapBounds = ({ setBounds }: { setBounds: (bounds: LatLngBounds) => void })
   }, [])
   return null
 }
+const MapCenter = ({ selectedVehicle }: { selectedVehicle?: ServerVehicle }) => {
+  const map = useMap();
 
-const Map = ({ filteredVehicles, zones, setVehicleUUID, modelFilter, setBounds }: Props): JSX.Element => {
+  useEffect(() => {
+    if (selectedVehicle) {
+      map.setView([selectedVehicle.locationLatitude, selectedVehicle.locationLongitude], 20)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedVehicle])
+  return null
+}
+
+const Map = ({ filteredVehicles, zones, selectedVehicle, setSelectedVehicle, modelFilter, setBounds }: Props): JSX.Element => {
 
   return (
     <MapContainer
@@ -53,10 +65,17 @@ const Map = ({ filteredVehicles, zones, setVehicleUUID, modelFilter, setBounds }
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Markers vehicles={filteredVehicles} setVehicleUUID={setVehicleUUID} />
+      <Markers vehicles={filteredVehicles} setSelectedVehicle={setSelectedVehicle} />
       <Zones zones={zones} modelFilter={modelFilter} />
       <EditMap setBounds={setBounds} />
       <MapBounds setBounds={setBounds} />
+      {selectedVehicle && (
+        <Circle
+          center={[selectedVehicle.locationLatitude, selectedVehicle.locationLongitude]}
+          color='white'
+        />
+      )}
+      <MapCenter selectedVehicle={selectedVehicle} />
     </MapContainer>
   );
 };

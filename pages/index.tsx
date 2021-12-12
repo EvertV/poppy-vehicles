@@ -15,7 +15,7 @@ const fetcher = (...args: any) => fetch(...args).then((res) => res.json());
 
 const Home: NextPage = () => {
   const [showSplash, setShowSplash] = useState<boolean>(true);
-  const [vehicleUUID, setVehicleUUID] = useState<string>();
+  const [selectedVehicle, setSelectedVehicle] = useState<ServerVehicle | undefined>();
   const [modelFilter, setModelFilter] = useState<string[]>(["car", "step", "scooter"]);
   const [filteredVehicles, setFilteredVehicles] = useState<ServerVehicle[]>()
   const [bounds, setBounds] = useState<LatLngBounds>()
@@ -40,7 +40,7 @@ const Home: NextPage = () => {
   }, [bounds, modelFilter, vehicles])
 
   const { data: zones, error: zonesError } = useSWR<{ zones: ServerZone[] }, string>(
-    `https://poppy.red/api/v2/zones${vehicleUUID ? `?vehicleUUID=${vehicleUUID}` : ``}`,
+    `https://poppy.red/api/v2/zones${selectedVehicle ? `?vehicleUUID=${selectedVehicle.uuid}` : ``}`,
     fetcher
   );
 
@@ -78,14 +78,14 @@ const Home: NextPage = () => {
                 overflow: hidden;
                 flex-basis: 75%;
               `}>
-              <Map filteredVehicles={filteredVehicles} zones={zones?.zones} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} setBounds={setBounds} />
+              <Map filteredVehicles={filteredVehicles} zones={zones?.zones} selectedVehicle={selectedVehicle} setSelectedVehicle={setSelectedVehicle} modelFilter={modelFilter} setBounds={setBounds} />
             </section>
             <aside css={css`
                 padding: 1rem;
                 flex-basis: 25%;
                 overflow: auto;
               `}>
-              <Sidebar filteredVehicles={filteredVehicles} vehicleUUID={vehicleUUID} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} setModelFilter={setModelFilter} />
+              <Sidebar filteredVehicles={filteredVehicles} selectedVehicle={selectedVehicle} setSelectedVehicle={setSelectedVehicle} modelFilter={modelFilter} setModelFilter={setModelFilter} />
             </aside>
           </main>
         </>

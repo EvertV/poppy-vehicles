@@ -5,18 +5,27 @@ import Vehicle from '@/components/Vehicle';
 const INITIAL_DISPLAY_AMOUNT = 10;
 interface Props {
   filteredVehicles?: ServerVehicle[]
-  setVehicleUUID: (uuid: string) => void
+  setSelectedVehicle: (v?: ServerVehicle) => void
   setModelFilter: (model: string[]) => void
   modelFilter: string[]
-  vehicleUUID?: string
+  selectedVehicle?: ServerVehicle
 }
-const Sidebar = ({ filteredVehicles, vehicleUUID, modelFilter, setModelFilter }: Props) => {
+const Sidebar = ({ filteredVehicles, selectedVehicle, modelFilter, setModelFilter, setSelectedVehicle }: Props) => {
+  const [visibleVehicles, setVisibleVehicles] = useState<ServerVehicle[] | undefined>(filteredVehicles);
   const [displayAmount, setDisplayAmount] = useState<number>(INITIAL_DISPLAY_AMOUNT);
   const totalAmount = useMemo(() => filteredVehicles?.length || 0, [filteredVehicles]);
-  const selectedVehicle = useMemo(() => filteredVehicles?.find(v => v.uuid === vehicleUUID), [vehicleUUID, filteredVehicles]);
+
   useEffect(() => {
     setDisplayAmount(INITIAL_DISPLAY_AMOUNT);
   }, [filteredVehicles])
+
+  useEffect(() => {
+    const vehicles = filteredVehicles?.filter(v => selectedVehicle?.uuid !== v.uuid).slice(0, displayAmount);
+    if (selectedVehicle) {
+      vehicles?.unshift(selectedVehicle)
+    }
+    setVisibleVehicles(vehicles)
+  }, [filteredVehicles, displayAmount, selectedVehicle])
 
   return (
     <>
@@ -46,19 +55,21 @@ const Sidebar = ({ filteredVehicles, vehicleUUID, modelFilter, setModelFilter }:
           ))}
         </HStack>
       </CheckboxGroup>
-      {selectedVehicle && (
-        <Box maxW='sm' overflow='hidden' mt={4}>
-          <Heading as='h2' size='md' mb={4}>
-            Selected vehicle
-          </Heading>
-          <Vehicle p={4} vehicle={selectedVehicle} />
-        </Box>
-      )}
       <Heading as='h2' size='md' my={4}>
         Visible vehicle{filteredVehicles?.length !== 1 && 's'} ({filteredVehicles?.length})
       </Heading>
-      {filteredVehicles?.slice(0, displayAmount).map((vehicle: ServerVehicle) => (
-        <Vehicle key={vehicle.uuid} vehicle={vehicle} mb={4} p={4} onClick={(vehicle) => console.log(vehicle)} />
+      {visibleVehicles?.map((vehicle: ServerVehicle) => (
+        <Vehicle
+          key={vehicle.uuid}
+
+          vehicle={vehicle}
+          mb={4}
+          p={4}
+          onClick={(v) => {
+            setSelectedVehicle(v)
+          }}
+          isSelected={selectedVehicle && (selectedVehicle.uuid === vehicle.uuid)}
+        />
       ))}
       {totalAmount > displayAmount && (
         <Button onClick={() => setDisplayAmount(totalAmount)}>

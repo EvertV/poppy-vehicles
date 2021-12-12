@@ -10,7 +10,7 @@ import Vehicle from '@/components/Vehicle';
 
 interface Props {
   vehicles: ServerVehicle[]
-  setVehicleUUID: (uuid: string) => void
+  setSelectedVehicle: (v?: ServerVehicle) => void
 }
 const carIcon = new L.Icon({
   iconSize: new L.Point(30, 30),
@@ -45,7 +45,7 @@ const createClusterCustomIcon = (cluster: any) => {
   });
 }
 
-const Markers = ({ vehicles, setVehicleUUID }: Props): JSX.Element => {
+const Markers = ({ vehicles, setSelectedVehicle }: Props): JSX.Element => {
   return (
     <MarkerClusterGroup spiderfyOnMaxZoom={false} showCoverageOnHover={false} maxClusterRadius={40} iconCreateFunction={createClusterCustomIcon}>
       {vehicles.map((v: ServerVehicle) => (
@@ -55,10 +55,10 @@ const Markers = ({ vehicles, setVehicleUUID }: Props): JSX.Element => {
           icon={getIcon(v.model.type)}
           eventHandlers={{
             popupopen: () => {
-              setVehicleUUID(v.uuid)
+              setSelectedVehicle(v)
             },
             popupclose: () => {
-              setVehicleUUID('')
+              setSelectedVehicle(undefined)
             },
           }}
         >
