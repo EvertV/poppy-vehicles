@@ -8,6 +8,8 @@
     "build": "next build && next export"
   },
   "dependencies": {
+    "@emotion/babel-preset-css-prop": "^11.2.0",
+    "@emotion/react": "^11.7.0",
     "@turf/buffer": "^6.5.0",
     "@turf/collect": "^6.5.0",
     "leaflet": "^1.7.1",
@@ -22,6 +24,8 @@
     "swr": "^1.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@emotion/babel-plugin": "^11.3.0",
     "@types/leaflet": "^1.7.6",
     "@types/node": "16.11.11",
     "@types/react": "17.0.37",

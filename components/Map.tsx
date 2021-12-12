@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+
+import { css } from '@emotion/react'
+
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css"; // Re-uses images from ~leaflet package
@@ -46,13 +49,20 @@ const Map = ({ vehicles, zones, setVehicleUUID, modelFilter }: Props): JSX.Eleme
 
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div style={{ flexBasis: '75%' }}>
+    <div css={css`
+      display: flex;
+      flex-direction: row;
+    `}>
+      <div css={css`
+        flex-basis: 75%;
+      `}>
         <MapContainer
           center={[51.220290, 4.399433]} // Antwerp
           zoom={14}
           placeholder={<MapPlaceholder />}
-          style={{ height: "100vh", width: 'auto' }}
+          css={css`
+            height: 100vh;
+          `}
         >
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -63,7 +73,10 @@ const Map = ({ vehicles, zones, setVehicleUUID, modelFilter }: Props): JSX.Eleme
           <EditMap setBounds={setBounds} />
         </MapContainer>
       </div>
-      <div style={{ flexBasis: '25%' }}>
+      <div css={css`
+        padding: 1rem;
+        flex-basis: 25%;
+      `}>
         <DisplayVehicles filteredVehicles={filteredVehicles} />
       </div>
     </div>
