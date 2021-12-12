@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { css } from '@emotion/react'
 
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, useMap, useMapEvent } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css"; // Re-uses images from ~leaflet package
 import "leaflet-defaulticon-compatibility";
@@ -25,6 +25,13 @@ interface Props {
   modelFilter: string[]
 }
 
+const MapBounds = ({ setBounds }: { setBounds: (bounds: LatLngBounds) => void }) => {
+  const map = useMapEvent('moveend', () => {
+    setBounds(map.getBounds())
+  })
+  return null
+}
+
 const Map = ({ filteredVehicles, zones, setVehicleUUID, modelFilter, setBounds }: Props): JSX.Element => {
 
   return (
@@ -42,6 +49,7 @@ const Map = ({ filteredVehicles, zones, setVehicleUUID, modelFilter, setBounds }
       <Markers vehicles={filteredVehicles} setVehicleUUID={setVehicleUUID} />
       <Zones zones={zones} modelFilter={modelFilter} />
       <EditMap setBounds={setBounds} />
+      <MapBounds setBounds={setBounds} />
     </MapContainer>
   );
 };

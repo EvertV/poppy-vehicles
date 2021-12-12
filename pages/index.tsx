@@ -47,10 +47,11 @@ const Home: NextPage = () => {
   const Map = useMemo(
     () =>
       dynamic(() => import("@/components/Map"), {
-        loading: () => (<Center css={css`
-        height: calc(100vh - 65px);`}>
-          <Spinner color='red.500' />
-        </Center>),
+        loading: () => (
+          <Center css={css`height: calc(100vh - 65px);`}>
+            <Spinner color='red.500' />
+          </Center>
+        ),
         ssr: false,
       }),
     []

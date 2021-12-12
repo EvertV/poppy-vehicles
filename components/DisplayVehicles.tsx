@@ -54,7 +54,7 @@ const DisplayVehicles = ({ filteredVehicles, vehicleUUID, modelFilter, setModelF
         </Box>
       )}
       <Heading as='h2' size='md' my={4}>
-        {hasSelection ? 'Selected vehicles' : 'All vehicles'} ({filteredVehicles?.length})
+        Visible vehicles ({filteredVehicles?.length})
       </Heading>
       {filteredVehicles?.slice(0, displayAmount).map((vehicle: ServerVehicle) => (
         <Vehicle key={vehicle.uuid} vehicle={vehicle} mb={4} p={4} />
