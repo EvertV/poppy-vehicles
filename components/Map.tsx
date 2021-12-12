@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 
 import { css } from '@emotion/react'
 
-import { MapContainer, TileLayer, useMap, useMapEvent } from "react-leaflet";
+import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css"; // Re-uses images from ~leaflet package
 import "leaflet-defaulticon-compatibility";
@@ -26,9 +26,16 @@ interface Props {
 }
 
 const MapBounds = ({ setBounds }: { setBounds: (bounds: LatLngBounds) => void }) => {
-  const map = useMapEvent('moveend', () => {
-    setBounds(map.getBounds())
+  const map = useMapEvents({
+    moveend: () => {
+      setBounds(map.getBounds())
+    }
   })
+  // Filter on load
+  useEffect(() => {
+    setBounds(map.getBounds())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return null
 }
 

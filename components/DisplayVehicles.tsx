@@ -57,7 +57,7 @@ const DisplayVehicles = ({ filteredVehicles, vehicleUUID, modelFilter, setModelF
         Visible vehicles ({filteredVehicles?.length})
       </Heading>
       {filteredVehicles?.slice(0, displayAmount).map((vehicle: ServerVehicle) => (
-        <Vehicle key={vehicle.uuid} vehicle={vehicle} mb={4} p={4} />
+        <Vehicle key={vehicle.uuid} vehicle={vehicle} mb={4} p={4} onClick={(vehicle) => console.log(vehicle)} />
       ))}
       {totalAmount > displayAmount && (
         <Button onClick={() => setDisplayAmount(totalAmount)}>
