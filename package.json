@@ -21,7 +21,8 @@
     "react-leaflet": "^3.2.2",
     "react-leaflet-draw": "^0.19.8",
     "react-leaflet-markercluster": "^3.0.0-rc1",
-    "swr": "^1.1.0"
+    "swr": "^1.1.0",
+    "the-new-css-reset": "^1.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
