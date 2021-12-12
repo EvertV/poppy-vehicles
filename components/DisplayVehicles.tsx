@@ -9,9 +9,8 @@ interface Props {
   setModelFilter: (model: string[]) => void
   modelFilter: string[]
   vehicleUUID?: string
-  hasSelection?: boolean
 }
-const DisplayVehicles = ({ filteredVehicles, vehicleUUID, modelFilter, setModelFilter, hasSelection }: Props) => {
+const Sidebar = ({ filteredVehicles, vehicleUUID, modelFilter, setModelFilter }: Props) => {
   const [displayAmount, setDisplayAmount] = useState<number>(INITIAL_DISPLAY_AMOUNT);
   const totalAmount = useMemo(() => filteredVehicles?.length || 0, [filteredVehicles]);
   const selectedVehicle = useMemo(() => filteredVehicles?.find(v => v.uuid === vehicleUUID), [vehicleUUID, filteredVehicles]);
@@ -21,6 +20,17 @@ const DisplayVehicles = ({ filteredVehicles, vehicleUUID, modelFilter, setModelF
 
   return (
     <>
+      {selectedVehicle && (
+        <Alert status='info' borderRadius='lg' mb={4}>
+          <AlertIcon />
+          <Box flex='1'>
+            <AlertTitle>Zones changed</AlertTitle>
+            <AlertDescription display='block'>
+              Only the operational area of this vehicle is shown.
+            </AlertDescription>
+          </Box>
+        </Alert>
+      )}
       <Heading as='h2' size='md' mb={4}>
         Filter
       </Heading>
@@ -41,20 +51,11 @@ const DisplayVehicles = ({ filteredVehicles, vehicleUUID, modelFilter, setModelF
           <Heading as='h2' size='md' mb={4}>
             Selected vehicle
           </Heading>
-          <Vehicle p={4} vehicle={selectedVehicle} mb={4} />
-          <Alert status='info' borderRadius='lg'>
-            <AlertIcon />
-            <Box flex='1'>
-              <AlertTitle>Zones changed</AlertTitle>
-              <AlertDescription display='block'>
-                Only operational area of this vehicle is now shown.
-              </AlertDescription>
-            </Box>
-          </Alert>
+          <Vehicle p={4} vehicle={selectedVehicle} />
         </Box>
       )}
       <Heading as='h2' size='md' my={4}>
-        Visible vehicles ({filteredVehicles?.length})
+        Visible vehicle{filteredVehicles?.length !== 1 && 's'} ({filteredVehicles?.length})
       </Heading>
       {filteredVehicles?.slice(0, displayAmount).map((vehicle: ServerVehicle) => (
         <Vehicle key={vehicle.uuid} vehicle={vehicle} mb={4} p={4} onClick={(vehicle) => console.log(vehicle)} />
@@ -68,4 +69,4 @@ const DisplayVehicles = ({ filteredVehicles, vehicleUUID, modelFilter, setModelF
   )
 };
 
-export default DisplayVehicles;
+export default Sidebar;

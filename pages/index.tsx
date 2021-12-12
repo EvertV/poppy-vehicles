@@ -5,7 +5,7 @@ import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import SplashScreen from '@/components/SplashScreen';
 import Header from '@/components/Header';
-import DisplayVehicles from '@/components/DisplayVehicles';
+import Sidebar from '@/components/Sidebar';
 import { css } from '@emotion/react'
 import { LatLngBounds } from "leaflet"
 import { Center, Spinner } from '@chakra-ui/react'
@@ -85,7 +85,7 @@ const Home: NextPage = () => {
                 flex-basis: 25%;
                 overflow: auto;
               `}>
-              <DisplayVehicles filteredVehicles={filteredVehicles} vehicleUUID={vehicleUUID} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} setModelFilter={setModelFilter} hasSelection={!!bounds} />
+              <Sidebar filteredVehicles={filteredVehicles} vehicleUUID={vehicleUUID} setVehicleUUID={setVehicleUUID} modelFilter={modelFilter} setModelFilter={setModelFilter} />
             </aside>
           </main>
         </>
