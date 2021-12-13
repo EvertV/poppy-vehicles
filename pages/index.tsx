@@ -33,7 +33,6 @@ const fetcher = (...args: any) => fetch(...args).then((res) => res.json());
 const Home: NextPage = () => {
   const [showSplash, setShowSplash] = useState<boolean>(true);
   const {
-    vehicles,
     selectedVehicle,
     setVehicles,
     filters,
@@ -41,11 +40,11 @@ const Home: NextPage = () => {
     setZones
   } = useStore((state: Store) => (state), shallow);
 
-  const { data: serverVehicles, error: vehiclesError } = useSWR<ServerVehicle[], string>(
+  const { data: serverVehicles, error: serverVehiclesError } = useSWR<ServerVehicle[], string>(
     `https://poppy.red/api/v2/vehicles`,
     fetcher
   );
-  const { data: serverZones, error: zonesError } = useSWR<{ zones: ServerZone[] }, string>(
+  const { data: serverZones, error: serverZonesError } = useSWR<{ zones: ServerZone[] }, string>(
     `https://poppy.red/api/v2/zones${selectedVehicle ? `?vehicleUUID=${selectedVehicle.uuid}` : ``}`,
     fetcher
   );
@@ -53,10 +52,12 @@ const Home: NextPage = () => {
   useEffect(() => {
     setTimeout(() => { setShowSplash(false) }, 2000)
   }, [])
+
   useEffect(() => {
     if (serverVehicles)
       setVehicles(serverVehicles)
   }, [bounds, filters, setVehicles, serverVehicles])
+
   useEffect(() => {
     if (serverZones?.zones)
       setZones(serverZones.zones)
@@ -75,7 +76,7 @@ const Home: NextPage = () => {
     []
   );
 
-  if (vehiclesError || zonesError) return (
+  if (serverVehiclesError || serverZonesError) return (
     <Alert status='error'>
       <AlertIcon />
       There was an error processing your request
@@ -83,8 +84,8 @@ const Home: NextPage = () => {
 
   return (
     <>
-      {(showSplash || !vehicles) && <SplashScreen />}
-      {(vehicles) &&
+      {(showSplash || !serverVehicles) && <SplashScreen />}
+      {(serverVehicles) &&
         <>
           <Header />
           <MainContainer>
