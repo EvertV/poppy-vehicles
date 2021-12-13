@@ -68,7 +68,7 @@ const Sidebar = () => {
           vehicle={vehicle}
           mb={4}
           p={4}
-          onClick={(v) => {
+          setSelectedVehicle={(v) => {
             setSelectedVehicle(v)
           }}
           isSelected={selectedVehicle && (selectedVehicle.uuid === vehicle.uuid)}
