@@ -53,18 +53,11 @@ const Markers = (): JSX.Element => {
           key={v.uuid}
           icon={getIcon(v.model.type)}
           eventHandlers={{
-            popupopen: () => {
+            click: () => {
               setSelectedVehicle(v)
             },
-            popupclose: () => {
-              setSelectedVehicle(undefined)
-            },
           }}
-        >
-          <Popup>
-            <Vehicle vehicle={v} noBorder />
-          </Popup>
-        </Marker>
+        />
       ))}
     </MarkerClusterGroup>
   );
