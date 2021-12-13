@@ -6,10 +6,6 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { Global, css } from '@emotion/react'
 
 const GlobalStyles = css`
-  html {
-    font-family: "Quiet Sans Regular", sans-serif;
-    color: #181818;
-  }
   body {
     height: 100vh;
   }
