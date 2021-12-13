@@ -1,7 +1,7 @@
 import L from "leaflet";
 
 import { Marker } from "react-leaflet";
-import styles from "../styles/map.module.css"
+import styles from "@styles/map.module.css"
 import 'leaflet.markercluster';
 //@ts-ignore
 import MarkerClusterGroup from 'react-leaflet-markercluster';

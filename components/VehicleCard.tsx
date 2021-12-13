@@ -8,7 +8,7 @@ interface Props {
   isSelected?: boolean
 }
 
-const Vehicle = ({ vehicle, isSelected }: Props) => {
+const VehicleCard = ({ vehicle, isSelected }: Props) => {
   const setSelectedVehicle = useStore((state: Store) => state.setSelectedVehicle)
 
   return (
@@ -68,4 +68,4 @@ const Vehicle = ({ vehicle, isSelected }: Props) => {
   )
 };
 
-export default Vehicle;
+export default VehicleCard;

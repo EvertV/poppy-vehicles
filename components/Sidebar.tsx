@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { Checkbox, CheckboxGroup, HStack, Heading, Box, Button, Alert, AlertIcon, Text, AlertTitle, AlertDescription } from '@chakra-ui/react'
-import Vehicle from '@/components/Vehicle';
+import Vehicle from '@components/VehicleCard';
 import { useStore } from 'store';
 import shallow from 'zustand/shallow';
 

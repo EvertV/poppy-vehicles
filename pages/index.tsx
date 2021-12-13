@@ -2,9 +2,9 @@ import React, { useEffect, useState, useMemo } from "react";
 import useSWR from "swr";
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
-import SplashScreen from '@/components/SplashScreen';
-import Header from '@/components/Header';
-import Sidebar from '@/components/Sidebar';
+import SplashScreen from '@components/SplashScreen';
+import Header from '@components/Header';
+import Sidebar from '@components/Sidebar';
 import { css } from '@emotion/react'
 import { Center, Spinner, Alert, AlertIcon } from '@chakra-ui/react'
 import { useStore } from 'store';
@@ -65,7 +65,7 @@ const Home: NextPage = () => {
 
   const Map = useMemo(
     () =>
-      dynamic(() => import("@/components/Map"), {
+      dynamic(() => import("@components/Map"), {
         loading: () => (
           <Center css={css`height: calc(100vh - 65px);`}>
             <Spinner color='red.500' />

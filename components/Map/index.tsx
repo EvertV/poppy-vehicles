@@ -11,9 +11,9 @@ import 'leaflet.markercluster';
 import "react-leaflet-markercluster/dist/styles.min.css";
 import 'leaflet-draw/dist/leaflet.draw.css'
 
-import Zones from '@/components/Zones';
-import Markers from '@/components/Markers';
-import EditMap from '@/components/EditMap';
+import Zones from '@components/Map/Zones';
+import Markers from '@components/Map/Markers';
+import EditMap from '@components/Map/EditMap';
 
 import { useStore } from 'store';
 import shallow from 'zustand/shallow';
@@ -56,7 +56,7 @@ const MapBounds = () => {
       setBounds(map.getBounds())
     }
   })
-  // Filter on load
+  // Set bounds on load
   useEffect(() => {
     setBounds(map.getBounds())
     // eslint-disable-next-line react-hooks/exhaustive-deps
