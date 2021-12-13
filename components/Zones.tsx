@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { Polygon } from "react-leaflet";
 
 import { LatLngExpression } from "leaflet";
+import { useStore } from 'store';
 
 interface Props {
   zones?: ServerZone[];
-  modelFilter: string[]
 }
 const normaliseArrays = (arrays: LatLngExpression[][]): LatLngExpression[][] => {
   const reversedValues = arrays.map((longlat: LatLngExpression[]) => {
@@ -14,12 +14,14 @@ const normaliseArrays = (arrays: LatLngExpression[][]): LatLngExpression[][] => 
   });
   return reversedValues;
 };
-const Zones = ({ zones, modelFilter }: Props): JSX.Element => {
+const Zones = ({ zones }: Props): JSX.Element => {
+  const filters = useStore(state => state.filters)
   const [stack, setStack] = useState<JSX.Element[]>([]);
+
   useEffect(() => {
     const getPolygons = () => {
       const zonesArray: JSX.Element[] = [];
-      zones?.filter((z: ServerZone) => modelFilter.some(filter => z.name.includes(filter))).forEach((zoneContainer: ServerZone): JSX.Element | void => {
+      zones?.filter((z: ServerZone) => filters.some(filter => z.name.includes(filter))).forEach((zoneContainer: ServerZone): JSX.Element | void => {
         const coordinates = zoneContainer.geom.geometry.coordinates;
         const type = zoneContainer.geom.geometry.type;
 
@@ -52,7 +54,7 @@ const Zones = ({ zones, modelFilter }: Props): JSX.Element => {
     if (zones) {
       getPolygons();
     }
-  }, [zones, modelFilter]);
+  }, [zones, filters]);
 
   return <>{stack}</>;
 };

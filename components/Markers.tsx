@@ -6,11 +6,11 @@ import 'leaflet.markercluster';
 //@ts-ignore
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Vehicle from '@/components/Vehicle';
+import { useStore } from 'store';
 
 
 interface Props {
   vehicles: ServerVehicle[]
-  setSelectedVehicle: (v?: ServerVehicle) => void
 }
 const carIcon = new L.Icon({
   iconSize: new L.Point(30, 30),
@@ -45,7 +45,9 @@ const createClusterCustomIcon = (cluster: any) => {
   });
 }
 
-const Markers = ({ vehicles, setSelectedVehicle }: Props): JSX.Element => {
+const Markers = ({ vehicles }: Props): JSX.Element => {
+  const setSelectedVehicle = useStore((state: Store) => state.setSelectedVehicle)
+
   return (
     <MarkerClusterGroup spiderfyOnMaxZoom={false} showCoverageOnHover={false} maxClusterRadius={40} iconCreateFunction={createClusterCustomIcon}>
       {vehicles.map((v: ServerVehicle) => (

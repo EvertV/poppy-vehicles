@@ -1,13 +1,12 @@
 import { FeatureGroup, useMap } from 'react-leaflet';
 import { EditControl } from "react-leaflet-draw"
-import { LatLngBounds, latLngBounds } from "leaflet"
+import { latLngBounds } from "leaflet"
+import { useStore } from 'store';
 
-interface Props {
-  setBounds: (bounds: LatLngBounds | undefined) => void
-}
 
-const EditMap = ({ setBounds }: Props) => {
+const EditMap = () => {
   const map = useMap();
+  const setBounds = useStore((state: Store) => state.setBounds)
 
   return (
     <FeatureGroup>

@@ -15,19 +15,11 @@ import Zones from '@/components/Zones';
 import Markers from '@/components/Markers';
 import EditMap from '@/components/EditMap';
 
-import { LatLngBounds } from "leaflet"
 import { useStore } from 'store';
+import shallow from 'zustand/shallow';
 
-interface Props {
-  filteredVehicles: ServerVehicle[];
-  selectedVehicle?: ServerVehicle;
-  zones?: ServerZone[];
-  setSelectedVehicle: (v?: ServerVehicle) => void
-  setBounds: (bounds: LatLngBounds | undefined) => void
-  modelFilter: string[]
-}
-
-const MapBounds = ({ setBounds }: { setBounds: (bounds: LatLngBounds) => void }) => {
+const MapBounds = () => {
+  const setBounds = useStore(state => state.setBounds)
   const map = useMapEvents({
     moveend: () => {
       setBounds(map.getBounds())
@@ -52,8 +44,8 @@ const MapCenter = ({ selectedVehicle }: { selectedVehicle?: ServerVehicle }) => 
   return null
 }
 
-const Map = ({ zones, selectedVehicle, setSelectedVehicle, modelFilter, setBounds }: Props): JSX.Element => {
-  const filteredVehicles = useStore(state => state.vehicles)
+const Map = (): JSX.Element => {
+  const { vehicles: filteredVehicles, selectedVehicle, zones } = useStore(state => state, shallow)
 
   return (
     <MapContainer
@@ -67,10 +59,10 @@ const Map = ({ zones, selectedVehicle, setSelectedVehicle, modelFilter, setBound
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Markers vehicles={filteredVehicles} setSelectedVehicle={setSelectedVehicle} />
-      <Zones zones={zones} modelFilter={modelFilter} />
-      <EditMap setBounds={setBounds} />
-      <MapBounds setBounds={setBounds} />
+      <Markers vehicles={filteredVehicles} />
+      <Zones zones={zones} />
+      <EditMap />
+      <MapBounds />
       {selectedVehicle && (
         <Circle
           center={[selectedVehicle.locationLatitude, selectedVehicle.locationLongitude]}

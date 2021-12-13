@@ -1,17 +1,21 @@
 import { useEffect, useState, useMemo } from "react";
 import { Checkbox, CheckboxGroup, HStack, Heading, Box, Button, Alert, AlertIcon, Text, AlertTitle, AlertDescription } from '@chakra-ui/react'
 import Vehicle from '@/components/Vehicle';
+import { useStore } from 'store';
+import shallow from 'zustand/shallow';
 
 const INITIAL_DISPLAY_AMOUNT = 10;
-interface Props {
-  filteredVehicles?: ServerVehicle[]
-  setSelectedVehicle: (v?: ServerVehicle) => void
-  setModelFilter: (model: string[]) => void
-  modelFilter: string[]
-  selectedVehicle?: ServerVehicle
-}
-const Sidebar = ({ filteredVehicles, selectedVehicle, modelFilter, setModelFilter, setSelectedVehicle }: Props) => {
-  const [visibleVehicles, setVisibleVehicles] = useState<ServerVehicle[] | undefined>(filteredVehicles);
+
+const Sidebar = () => {
+  const { filteredVehicles, selectedVehicle, setSelectedVehicle, setFilters, filters } = useStore(state => ({
+    filteredVehicles: state.vehicles,
+    selectedVehicle: state.selectedVehicle,
+    setSelectedVehicle: state.setSelectedVehicle,
+    setFilters: state.setFilters,
+    filters: state.filters,
+  }), shallow);
+
+  const [displayVehicles, setDisplayVehicles] = useState<ServerVehicle[] | undefined>(filteredVehicles);
   const [displayAmount, setDisplayAmount] = useState<number>(INITIAL_DISPLAY_AMOUNT);
   const totalAmount = useMemo(() => filteredVehicles?.length || 0, [filteredVehicles]);
 
@@ -24,7 +28,7 @@ const Sidebar = ({ filteredVehicles, selectedVehicle, modelFilter, setModelFilte
     if (selectedVehicle) {
       vehicles?.unshift(selectedVehicle)
     }
-    setVisibleVehicles(vehicles)
+    setDisplayVehicles(vehicles)
   }, [filteredVehicles, displayAmount, selectedVehicle])
 
   return (
@@ -45,8 +49,8 @@ const Sidebar = ({ filteredVehicles, selectedVehicle, modelFilter, setModelFilte
       </Heading>
       <CheckboxGroup
         colorScheme='red'
-        defaultValue={modelFilter}
-        onChange={value => setModelFilter(value.map(v => v.toString()))}>
+        defaultValue={filters}
+        onChange={value => setFilters(value.map(v => v.toString()))}>
         <HStack>
           {['car', 'step', 'scooter'].map((v: string) => (
             <Checkbox key={v} value={v}>
@@ -58,10 +62,9 @@ const Sidebar = ({ filteredVehicles, selectedVehicle, modelFilter, setModelFilte
       <Heading as='h2' size='md' my={4}>
         Visible vehicle{filteredVehicles?.length !== 1 && 's'} ({filteredVehicles?.length})
       </Heading>
-      {visibleVehicles?.map((vehicle: ServerVehicle) => (
+      {displayVehicles?.map((vehicle: ServerVehicle) => (
         <Vehicle
           key={vehicle.uuid}
-
           vehicle={vehicle}
           mb={4}
           p={4}
