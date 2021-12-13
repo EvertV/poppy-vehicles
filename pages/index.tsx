@@ -77,10 +77,16 @@ const Home: NextPage = () => {
   );
 
   if (serverVehiclesError || serverZonesError) return (
-    <Alert status='error'>
-      <AlertIcon />
-      There was an error processing your request
-    </Alert>);
+    <Center bgColor='red.200' css={css`height: 100vh;`}>
+      <Alert status='error' borderRadius='lg'
+        css={css`
+          max-width: 400px; 
+          margin: auto;
+        `}>
+        <AlertIcon />
+        There was an error processing your request
+      </Alert>
+    </Center>);
 
   return (
     <>
