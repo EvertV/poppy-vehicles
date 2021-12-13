@@ -1,7 +1,7 @@
 interface ServerZone {
   geom: {
     geometry: {
-      coordinates: number[][][];
+      coordinates: LatLngExpression[][][];
       type: string;
     };
     properties: {

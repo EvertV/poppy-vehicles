@@ -17,41 +17,36 @@ const Zones = (): JSX.Element => {
   const [stack, setStack] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
-    const getPolygons = () => {
-      const zonesArray: JSX.Element[] = [];
-      zones?.filter((z: ServerZone) => filters.some(filter => z.name.includes(filter))).forEach((zoneContainer: ServerZone): JSX.Element | void => {
-        const coordinates = zoneContainer.geom.geometry.coordinates;
-        const type = zoneContainer.geom.geometry.type;
+    const polygons: JSX.Element[] = [];
+    zones?.filter((z: ServerZone) => filters.some(filter => z.name.includes(filter))).forEach((zoneContainer: ServerZone): JSX.Element | void => {
+      const coordinates = zoneContainer.geom.geometry.coordinates;
+      const type = zoneContainer.geom.geometry.type;
 
-        if (coordinates && type === "MultiPolygon") {
-          coordinates?.forEach((zones: any, coorKey: number) => {
-            zones.forEach((zone: any, zonesKey: number) => {
-              zonesArray.push(
-                <Polygon
-                  key={`${zoneContainer.name}-${coorKey}-${zonesKey}`}
-                  pathOptions={{
-                    color: zoneContainer.name.includes("car")
-                      ? 'red'
-                      : 'deepskyblue',
-                    fillOpacity: zonesKey === 0 ? 0.2 : 0.5,
-                    stroke: true,
-                    lineJoin: 'round',
-                    fillRule: 'nonzero',
-                    dashArray: zonesKey !== 0 ? '5,5' : undefined,
-                    dashOffset: zonesKey !== 0 ? '5' : undefined
-                  }}
-                  positions={normaliseArrays(zone)}
-                />
-              );
-            });
+      if (coordinates && type === "MultiPolygon") {
+        coordinates?.forEach((zoneGroup: LatLngExpression[][][], zoneGroupKey: number) => {
+          zoneGroup.forEach((zone: LatLngExpression[][], zonesKey: number) => {
+            polygons.push(
+              <Polygon
+                key={`${zoneContainer.name}-${zoneGroupKey}-${zonesKey}`}
+                pathOptions={{
+                  color: zoneContainer.name.includes("car")
+                    ? 'red'
+                    : 'deepskyblue',
+                  fillOpacity: zonesKey === 0 ? 0.2 : 0.5,
+                  stroke: true,
+                  lineJoin: 'round',
+                  fillRule: 'nonzero',
+                  dashArray: zonesKey !== 0 ? '5,5' : undefined,
+                  dashOffset: zonesKey !== 0 ? '5' : undefined
+                }}
+                positions={normaliseArrays(zone)}
+              />
+            );
           });
-        }
-      });
-      setStack(zonesArray);
-    };
-    if (zones) {
-      getPolygons();
-    }
+        });
+      }
+    });
+    setStack(polygons);
   }, [zones, filters]);
 
   return <>{stack}</>;
