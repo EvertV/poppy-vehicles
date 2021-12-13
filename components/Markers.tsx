@@ -1,11 +1,10 @@
 import L from "leaflet";
 
-import { Marker, Popup } from "react-leaflet";
+import { Marker } from "react-leaflet";
 import styles from "../styles/map.module.css"
 import 'leaflet.markercluster';
 //@ts-ignore
 import MarkerClusterGroup from 'react-leaflet-markercluster';
-import Vehicle from '@/components/Vehicle';
 import { useStore } from 'store';
 
 const carIcon = new L.Icon({

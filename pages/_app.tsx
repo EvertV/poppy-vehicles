@@ -4,16 +4,6 @@ import type { AppProps } from "next/app";
 import { ChakraProvider } from '@chakra-ui/react'
 
 import { Global, css } from '@emotion/react'
-import { extendTheme } from '@chakra-ui/react'
-
-const colors = {
-  brand: {
-    900: '#1a365d',
-    800: '#153e75',
-    700: '#2a69ac',
-  },
-}
-const theme = extendTheme({ colors })
 
 const GlobalStyles = css`
   html {
@@ -30,7 +20,7 @@ const GlobalStyles = css`
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
+    <ChakraProvider>
       <Head>
         <title>Poppy</title>
         <meta name="description" content="A place to find all the Poppy vehicles." />

@@ -7,13 +7,7 @@ import shallow from 'zustand/shallow';
 const INITIAL_DISPLAY_AMOUNT = 10;
 
 const Sidebar = () => {
-  const { filteredVehicles, selectedVehicle, setSelectedVehicle, setFilters, filters } = useStore(state => ({
-    filteredVehicles: state.vehicles,
-    selectedVehicle: state.selectedVehicle,
-    setSelectedVehicle: state.setSelectedVehicle,
-    setFilters: state.setFilters,
-    filters: state.filters,
-  }), shallow);
+  const { vehicles: filteredVehicles, selectedVehicle, setFilters, filters } = useStore(state => (state), shallow);
 
   const [displayVehicles, setDisplayVehicles] = useState<ServerVehicle[] | undefined>(filteredVehicles);
   const [displayAmount, setDisplayAmount] = useState<number>(INITIAL_DISPLAY_AMOUNT);
@@ -66,10 +60,7 @@ const Sidebar = () => {
         <Vehicle
           key={vehicle.uuid}
           vehicle={vehicle}
-          mb={4}
-          p={4}
           isSelected={selectedVehicle && (selectedVehicle.uuid === vehicle.uuid)}
-          clickable
         />
       ))}
       {totalAmount > displayAmount && (
