@@ -56,7 +56,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (serverVehicles)
       setVehicles(serverVehicles)
-  }, [bounds, filters, setVehicles, serverVehicles])
+  }, [setVehicles, serverVehicles])
 
   useEffect(() => {
     if (serverZones?.zones)
