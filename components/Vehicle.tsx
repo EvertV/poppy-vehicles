@@ -14,7 +14,7 @@ const Vehicle = ({ vehicle, noBorder, mb, p, onClick, isSelected }: Props) => {
   const innerVehicle = (
     <Flex maxW='sm' bgColor={isSelected ? 'whitesmoke' : 'white'} borderWidth={noBorder ? '0' : isSelected ? '2px' : '1px'} borderRadius='lg' overflow='hidden' mb={mb} p={p}>
       <Flex direction='column' align='center'>
-        <Avatar bg={vehicle.model.type === 'car' ? 'red.500' : 'blue.500'} name={vehicle.model.type} src={`/${vehicle.model.type}.svg`} p={3} mb={1} />
+        <Avatar bg={vehicle.model.type === 'car' ? 'red.500' : 'blue.500'} name={vehicle.model.type} src={`/icons/${vehicle.model.type}.svg`} p={3} mb={1} />
       </Flex>
       <Box ml={3}>
         <Text as="div" fontWeight='bold' fontSize='lg'>

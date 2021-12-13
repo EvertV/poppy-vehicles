@@ -32,6 +32,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <Head>
+        <title>Poppy</title>
+        <meta name="description" content="A place to find all the Poppy vehicles." />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"

@@ -14,15 +14,15 @@ interface Props {
 }
 const carIcon = new L.Icon({
   iconSize: new L.Point(30, 30),
-  iconUrl: "/car-pin.png"
+  iconUrl: "/pins/car.png"
 });
 const scooterIcon = new L.Icon({
   iconSize: new L.Point(30, 30),
-  iconUrl: "/scooter-pin.png"
+  iconUrl: "/pins/scooter.png"
 });
 const stepIcon = new L.Icon({
   iconSize: new L.Point(30, 30),
-  iconUrl: "/step-pin.png"
+  iconUrl: "/pins/step.png"
 });
 
 const getIcon = (model: "scooter" | "car" | "step") => {

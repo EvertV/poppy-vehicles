@@ -16,6 +16,7 @@ import Markers from '@/components/Markers';
 import EditMap from '@/components/EditMap';
 
 import { LatLngBounds } from "leaflet"
+import { useStore } from 'store';
 
 interface Props {
   filteredVehicles: ServerVehicle[];
@@ -51,7 +52,8 @@ const MapCenter = ({ selectedVehicle }: { selectedVehicle?: ServerVehicle }) => 
   return null
 }
 
-const Map = ({ filteredVehicles, zones, selectedVehicle, setSelectedVehicle, modelFilter, setBounds }: Props): JSX.Element => {
+const Map = ({ zones, selectedVehicle, setSelectedVehicle, modelFilter, setBounds }: Props): JSX.Element => {
+  const filteredVehicles = useStore(state => state.vehicles)
 
   return (
     <MapContainer

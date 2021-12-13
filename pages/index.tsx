@@ -9,15 +9,19 @@ import Sidebar from '@/components/Sidebar';
 import { css } from '@emotion/react'
 import { LatLngBounds } from "leaflet"
 import { Center, Spinner } from '@chakra-ui/react'
+import { useStore } from 'store';
 
 //@ts-ignore
 const fetcher = (...args: any) => fetch(...args).then((res) => res.json());
 
 const Home: NextPage = () => {
+  const setVehicles = useStore(state => state.setVehicles)
+  const filteredVehicles = useStore(state => state.vehicles)
+
   const [showSplash, setShowSplash] = useState<boolean>(true);
   const [selectedVehicle, setSelectedVehicle] = useState<ServerVehicle | undefined>();
   const [modelFilter, setModelFilter] = useState<string[]>(["car", "step", "scooter"]);
-  const [filteredVehicles, setFilteredVehicles] = useState<ServerVehicle[]>()
+  // const [filteredVehicles, setFilteredVehicles] = useState<ServerVehicle[]>()
   const [bounds, setBounds] = useState<LatLngBounds>()
 
   useEffect(() => {
@@ -32,9 +36,9 @@ const Home: NextPage = () => {
     if (vehicles) {
       const newVehicles = vehicles.filter((v: ServerVehicle) => modelFilter.includes(v.model.type))
       if (bounds && bounds.isValid()) {
-        setFilteredVehicles(newVehicles.filter((v: ServerVehicle) => bounds.contains({ lat: v.locationLatitude, lng: v.locationLongitude })))
+        setVehicles(newVehicles.filter((v: ServerVehicle) => bounds.contains({ lat: v.locationLatitude, lng: v.locationLongitude })))
       } else {
-        setFilteredVehicles(newVehicles)
+        setVehicles(newVehicles)
       }
     }
   }, [bounds, modelFilter, vehicles])
@@ -61,10 +65,6 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Poppy </title>
-        <meta name="description" content="A place to find all the Poppy vehicles." />
-      </Head>
       {(showSplash || !filteredVehicles) && <SplashScreen />}
       {(filteredVehicles) &&
         <>

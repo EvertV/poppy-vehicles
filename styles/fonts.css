@@ -2,19 +2,22 @@
   font-family: "Quiet Sans Regular";
   font-style: normal;
   font-weight: normal;
-  src: local("Quiet Sans Regular"), url("QuietSansRegular.woff") format("woff");
+  src: local("Quiet Sans Regular"),
+    url("fonts/QuietSansRegular.woff") format("woff");
 }
 
 @font-face {
   font-family: "Quiet Sans Light";
   font-style: normal;
   font-weight: normal;
-  src: local("Quiet Sans Light"), url("QuietSansLight.woff") format("woff");
+  src: local("Quiet Sans Light"),
+    url("fonts/QuietSansLight.woff") format("woff");
 }
 
 @font-face {
   font-family: "Quiet Sans Bold";
   font-style: normal;
   font-weight: normal;
-  src: local("Quiet Sans Bold"), url("Quiet Sans Bold.woff") format("woff");
+  src: local("Quiet Sans Bold"),
+    url("fonts/Quiet Sans Bold.woff") format("woff");
 }
