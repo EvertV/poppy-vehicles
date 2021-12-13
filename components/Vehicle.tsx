@@ -5,25 +5,21 @@ import { useStore } from 'store';
 
 interface Props {
   vehicle: ServerVehicle
-  noBorder?: boolean
-  mb?: number
-  p?: number
   isSelected?: boolean
-  clickable?: boolean
 }
 
-const Vehicle = ({ vehicle, noBorder, mb, p, isSelected, clickable }: Props) => {
+const Vehicle = ({ vehicle, isSelected }: Props) => {
   const setSelectedVehicle = useStore((state: Store) => state.setSelectedVehicle)
 
   const InnerVehicle = () => useMemo(() => (
     <Flex
       maxW='sm'
       bgColor={isSelected ? 'whitesmoke' : 'white'}
-      borderWidth={noBorder ? '0' : isSelected ? '2px' : '1px'}
+      borderWidth={isSelected ? '2px' : '1px'}
       borderRadius='lg'
       overflow='hidden'
-      mb={mb}
-      p={p}
+      mb={4}
+      p={4}
       css={css`position: relative;`}
     >
       <Flex direction='column' align='center'>
@@ -61,19 +57,15 @@ const Vehicle = ({ vehicle, noBorder, mb, p, isSelected, clickable }: Props) => 
 
   return (
     <>
-      {clickable ? (
-        <Box onClick={() => setSelectedVehicle(vehicle)} cursor={!isSelected ? 'pointer' : 'default'}
-          css={css`
+      <Box onClick={() => setSelectedVehicle(vehicle)} cursor={!isSelected ? 'pointer' : 'default'}
+        css={css`
           z-index: 1;
             &:hover > div {
               background-color: whitesmoke;
             }`}
-        >
-          <InnerVehicle />
-        </Box>
-      ) :
+      >
         <InnerVehicle />
-      }
+      </Box>
       {isSelected && <Divider mb={4} />}
     </>
   )
