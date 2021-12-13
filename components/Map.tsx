@@ -18,6 +18,37 @@ import EditMap from '@/components/EditMap';
 import { useStore } from 'store';
 import shallow from 'zustand/shallow';
 
+
+const Map = (): JSX.Element => {
+  const { selectedVehicle } = useStore(state => state, shallow)
+
+  return (
+    <MapContainer
+      center={[51.220290, 4.399433]} // Antwerp
+      zoom={14}
+      css={css`
+        height: 100%;
+      `}
+    >
+      <TileLayer
+        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Markers />
+      <Zones />
+      <EditMap />
+      <MapBounds />
+      {selectedVehicle && (
+        <Circle
+          center={[selectedVehicle.locationLatitude, selectedVehicle.locationLongitude]}
+          color='red'
+        />
+      )}
+      <MapCenter selectedVehicle={selectedVehicle} />
+    </MapContainer>
+  );
+};
+
 const MapBounds = () => {
   const setBounds = useStore(state => state.setBounds)
   const map = useMapEvents({
@@ -32,6 +63,7 @@ const MapBounds = () => {
   }, [])
   return null
 }
+
 const MapCenter = ({ selectedVehicle }: { selectedVehicle?: ServerVehicle }) => {
   const map = useMap();
 
@@ -43,35 +75,5 @@ const MapCenter = ({ selectedVehicle }: { selectedVehicle?: ServerVehicle }) => 
   }, [selectedVehicle])
   return null
 }
-
-const Map = (): JSX.Element => {
-  const { vehicles: filteredVehicles, selectedVehicle, zones } = useStore(state => state, shallow)
-
-  return (
-    <MapContainer
-      center={[51.220290, 4.399433]} // Antwerp
-      zoom={14}
-      css={css`
-        height: 100%;
-      `}
-    >
-      <TileLayer
-        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Markers vehicles={filteredVehicles} />
-      <Zones zones={zones} />
-      <EditMap />
-      <MapBounds />
-      {selectedVehicle && (
-        <Circle
-          center={[selectedVehicle.locationLatitude, selectedVehicle.locationLongitude]}
-          color='red'
-        />
-      )}
-      <MapCenter selectedVehicle={selectedVehicle} />
-    </MapContainer>
-  );
-};
 
 export default Map;

@@ -5,17 +5,15 @@ import { Polygon } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
 import { useStore } from 'store';
 
-interface Props {
-  zones?: ServerZone[];
-}
 const normaliseArrays = (arrays: LatLngExpression[][]): LatLngExpression[][] => {
   const reversedValues = arrays.map((longlat: LatLngExpression[]) => {
     return [...longlat].reverse();
   });
   return reversedValues;
 };
-const Zones = ({ zones }: Props): JSX.Element => {
+const Zones = (): JSX.Element => {
   const filters = useStore(state => state.filters)
+  const zones = useStore(state => state.zones)
   const [stack, setStack] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
