@@ -44,7 +44,7 @@ const MapCenter = ({ selectedVehicle }: { selectedVehicle?: ServerVehicle }) => 
 
   useEffect(() => {
     if (selectedVehicle) {
-      map.setView([selectedVehicle.locationLatitude, selectedVehicle.locationLongitude], 20)
+      map.setView([selectedVehicle.locationLatitude, selectedVehicle.locationLongitude], 18)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedVehicle])
@@ -72,7 +72,7 @@ const Map = ({ filteredVehicles, zones, selectedVehicle, setSelectedVehicle, mod
       {selectedVehicle && (
         <Circle
           center={[selectedVehicle.locationLatitude, selectedVehicle.locationLongitude]}
-          color='white'
+          color='red'
         />
       )}
       <MapCenter selectedVehicle={selectedVehicle} />

@@ -62,8 +62,8 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Poppy vehicles</title>
-        <meta name="description" content="Displaying all poppy vehicles" />
+        <title>Poppy </title>
+        <meta name="description" content="A place to find all the Poppy vehicles." />
       </Head>
       {(showSplash || !filteredVehicles) && <SplashScreen />}
       {(filteredVehicles) &&
